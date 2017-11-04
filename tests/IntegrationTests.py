@@ -43,7 +43,7 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_10(self):
         self._test_chose(10)
 
-    def test_choice_10(self):
+    def test_choice_11(self):
             self._test_chose(11)
 
     def _test_chose(self, number):
