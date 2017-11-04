@@ -178,6 +178,21 @@ class ModelBuilderTests(unittest.TestCase):
         self.assertEqual(FragmentType.EndIfStatement, fileModel.fragments[3].type)
         self.assertEqual(" #endif\n", fileModel.fragments[3].text)
 
+    def test_LineCommentEndIfEOF(self):
+        testFile = "//#if x\n//body\n//#endif"
+        fileModel = ModelBuilder.build(testFile)
+
+        self.assertEqual(3, len(fileModel.fragments))
+
+        self.assertEqual(FragmentType.Body, fileModel.fragments[0].type)
+        self.assertEqual("//#if x\n", fileModel.fragments[0].text)
+
+        self.assertEqual(FragmentType.Body, fileModel.fragments[1].type)
+        self.assertEqual("//body\n", fileModel.fragments[1].text)
+
+        self.assertEqual(FragmentType.Body, fileModel.fragments[2].type)
+        self.assertEqual("//#endif", fileModel.fragments[2].text)
+
     def test_embeddedConditions(self):
         testFile = "#if dt\n line1\n #if sl\n line 2\n #else\n line 3\n #endif\n line 4\n #endif"
         fileModel = ModelBuilder.build(testFile)

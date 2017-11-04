@@ -4,7 +4,7 @@ from FileModel.FileFragment import *
 
 class ModelBuilder:
     MiltilineCommentP = r"/\*(?:\n|.)+?\*/"
-    LineCommentP = r"//.+?\n"
+    LineCommentP = r"//.+?(?:\n|$)"
     IfStatementP = r"[ \t\f]*#[ \t\f]*if\s*.+?(?:\n|$)"
     ElifStatementP = r"[ \t\f]*#[ \t\f]*elif\s*.+?(?:\n|$)"
     ElseStatementP = r"[ \t\f]*#[ \t\f]*else\s*?(?:\n|$)"
