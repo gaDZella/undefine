@@ -43,6 +43,9 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_10(self):
         self._test_chose(10)
 
+    def test_choice_10(self):
+            self._test_chose(11)
+
     def _test_chose(self, number):
         file_name = str.format("{0}.cs", number)
         file = str.format("{}/{}/{}", self.test_dir, "source", file_name)
