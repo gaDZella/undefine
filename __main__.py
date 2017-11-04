@@ -4,15 +4,27 @@ from SharpCleaner import SharpCleaner
 
 
 def test(p_args):
+    print("Checking for applying the following name definitions:")
+    _show_report(_do_clean(p_args, False), "{0} code lines can be removed. {1} files and {2} lines would be affected")
+
+
+def apply(p_args):
+    print("Applying the following name definitions:")
+    _show_report(_do_clean(p_args, True), "{0} code lines removed. {1} files and {2} lines affected")
+
+
+def _do_clean(p_args,  apply_changes):
     defined = p_args.define if p_args.define is not None else []
     undefined = p_args.undef if p_args.undef is not None else []
     keys = dict([(n, True) for n in defined] + [(n, False) for n in undefined])
-    print("Checking for applying the following name definitions:")
     for name, value in keys.items():
         print(str.format("#{0} {1}", 'define' if value else 'undef', name))
     print('...', end='\r')
     cleaner = SharpCleaner(keys)
-    results = cleaner.clean_folder(p_args.path, False)
+    return cleaner.clean_folder(p_args.path, apply_changes)
+
+
+def _show_report(results, completed_report_format_string):
     body_lines = 0
     total_lines = 0
     files_count = 0
@@ -26,7 +38,7 @@ def test(p_args):
                 total_lines += result['total_lines']
                 if result['total_lines'] > 0:
                     files_count += 1
-    print(str.format("Completed. {0} code lines can be removed. {1} files and {2} lines would be affected",
+    print(str.format("Completed. " + completed_report_format_string,
                      body_lines, files_count, total_lines))
     if len(error_files) > 0:
         print("Failed on these files:")
@@ -34,13 +46,8 @@ def test(p_args):
             print(file)
 
 
-def apply(p_args):
-    print("apply")
-    print(p_args)
-
-
 def scan(p_args):
-    print("stats")
+    print("TODO...")
     print(p_args)
 
 
