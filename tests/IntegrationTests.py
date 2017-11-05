@@ -19,7 +19,7 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_2(self):
         self._test_chose(2)
 
-    def test_choice_3_encodings(self):
+    def _test_choice_3_encodings(self):
         self._test_chose("3_encodings")
 
     def test_choice_4(self):
