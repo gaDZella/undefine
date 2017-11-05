@@ -8,6 +8,6 @@ install:
   - pip install coveralls
 script:
   - coverage run --omit=tests/* setup.py test
-  - codeclimate-test_reporter --file .coverage
 after_success:
   - coveralls
+  - ./cc-test-reporter --file .coverage
