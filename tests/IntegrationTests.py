@@ -9,7 +9,7 @@ class IntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         env_dir = tempfile.gettempdir()
-        cls.test_dir = env_dir + os.path.join("clean#Tests", "singleTrue")
+        cls.test_dir = os.path.join(env_dir, "clean#Tests", "singleTrue")
         shutil.rmtree(cls.test_dir, ignore_errors=True)
         shutil.copytree(os.path.join(os.path.dirname(SharpCleaner.__file__), "tests", "testFiles", "singleTrue"), cls.test_dir)
 
