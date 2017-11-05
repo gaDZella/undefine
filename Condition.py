@@ -13,7 +13,7 @@ class Condition:
             res = re.subn(p, key, new_cond, flags=re.IGNORECASE)
             new_cond = res[0]
             subs.append(res[1])
-        if max(subs, default=0) == 0:
+        if max(subs + [0]) == 0:
             return condition
 
         condition = new_cond.replace("||", "|").replace("&&", "&").replace("!", "~")
