@@ -36,7 +36,7 @@ class ModelBuilder:
                     continue
                 if re.match(pattern[0], fragment) is None:
                     res.extend(
-                        ModelBuilder.split_recursive(fragment, patterns[1:len(patterns)]))  # slimplity list slice here
+                        ModelBuilder.split_recursive(fragment, patterns[1:]))
                 else:
                     res.append(FileFragment(pattern[1], fragment))
         return res
