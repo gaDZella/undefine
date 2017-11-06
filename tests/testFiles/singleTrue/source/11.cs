@@ -1,5 +1,7 @@
 start body
-#if test2
+#if test1
+test1 body
+#elif test2
 test2 body
 #elif test
 test body
