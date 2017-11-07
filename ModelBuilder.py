@@ -1,5 +1,6 @@
-from FileModel.FileModel import *
-from FileModel.FileFragment import *
+from FileModel.FileFragment import FileFragment
+from FileModel.FragmentType import FragmentType
+import re
 
 
 class ModelBuilder:
@@ -20,7 +21,7 @@ class ModelBuilder:
             (ModelBuilder.ElseStatementP, FragmentType.ElseStatement),
             (ModelBuilder.EndIfStatementP, FragmentType.EndIfStatement),
         ])
-        return FileModel(models)
+        return models
 
     @staticmethod
     def split_recursive(file, patterns):

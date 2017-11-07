@@ -4,6 +4,7 @@ from joblib import Parallel, delayed
 from ModelBuilder import *
 from FileModel.FragmentType import *
 from Condition import *
+from FileModel.ConditionAccessor import ConditionAccessor
 
 
 class SharpCleaner:
@@ -15,7 +16,7 @@ class SharpCleaner:
         with open(file, 'r', encoding=encoding) as fr:
             data = fr.read()
         model = ModelBuilder.build(data)
-        result = self._clean(model.fragments)
+        result = self._clean(model)
         if result is not None:
             result['file'] = file
         if apply_changes and (result is not None and result['success']):
@@ -48,11 +49,11 @@ class SharpCleaner:
                     if f.type == FragmentType.IfStatement:
                         cond_stack.append([self._patch_cond(f)])
                     if f.type == FragmentType.ElIfStatement:
-                        orig_cond = f.get_condition()
+                        orig_cond = ConditionAccessor.get(f)
                         elif_cond = self._patch_cond(f)
                         if type(cond_stack[-1][-1]) is bool:
                             f.type = FragmentType.IfStatement
-                            f.set_condition(elif_cond)
+                            ConditionAccessor.set(f, elif_cond)
                         elif type(elif_cond) is bool:
                             elif_cond = str.format("!({0}) && {1}", cond_stack[-1][-1], orig_cond)
                             remove = SharpCleaner._should_remove(cond_stack, FragmentType.EndIfStatement)
@@ -61,7 +62,7 @@ class SharpCleaner:
                             total_lines_counter += 1
                             cond_stack.pop()
                             f.type = FragmentType.IfStatement
-                            f.set_condition(elif_cond)
+                            ConditionAccessor.set(f, elif_cond)
                             cond_stack.append([])
                         cond_stack[-1].append(self._patch_cond(f))
                     if f.type == FragmentType.ElseStatement:
@@ -84,8 +85,8 @@ class SharpCleaner:
         } if modified else None
 
     def _patch_cond(self, f):
-        cond = Condition.simplify(f.get_condition(), self.keys)
-        f.set_condition(cond)
+        cond = Condition.simplify(ConditionAccessor.get(f), self.keys)
+        ConditionAccessor.set(f, cond)
         return cond
 
     @staticmethod

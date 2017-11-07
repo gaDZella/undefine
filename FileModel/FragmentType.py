@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class FragmentType(Enum):
-    Body = 0
-    IfStatement = 1
-    ElIfStatement = 2
-    ElseStatement = 3
-    EndIfStatement = 4
+    Body = auto()
+    IfStatement = auto()
+    ElIfStatement = auto()
+    ElseStatement = auto()
+    EndIfStatement = auto()
