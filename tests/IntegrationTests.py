@@ -1,3 +1,4 @@
+import json
 import unittest
 import SharpCleaner
 import tempfile
@@ -9,9 +10,13 @@ class IntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         env_dir = tempfile.gettempdir()
-        cls.test_dir = os.path.join(env_dir, "clean#Tests", "singleTrue")
+        cls.test_dir = os.path.join(env_dir, "clean#Tests")
         shutil.rmtree(cls.test_dir, ignore_errors=True)
-        shutil.copytree(os.path.join(os.path.dirname(SharpCleaner.__file__), "tests", "testFiles", "singleTrue"), cls.test_dir)
+        shutil.copytree(os.path.join(os.path.dirname(SharpCleaner.__file__), "tests", "testFiles"), cls.test_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.test_dir, ignore_errors=True)
 
     def test_choice_1(self):
         self._test_chose(1)
@@ -46,13 +51,15 @@ class IntegrationTests(unittest.TestCase):
     def _test_choice_11(self):
             self._test_chose(11)
 
-    def _test_chose(self, number):
-        file_name = str.format("{0}.cs", number)
-        file = str.format("{}/{}/{}", self.test_dir, "source", file_name)
-        e_file = str.format("{}/{}/{}", self.test_dir, "result", file_name)
-        p = SharpCleaner.SharpCleaner({"TEST": True})
-        p.clean_file(file)
-        self._assert_files_are_equal(e_file, file)
+    def _test_chose(self, name):
+        in_file_path = str.format("{}/{}.in.cs", self.test_dir, name)
+        out_file_path = str.format("{}/{}.out.cs", self.test_dir, name)
+        keys_json_path = str.format("{}/{}.args.json", self.test_dir, name)
+        with open(keys_json_path) as keys_file:
+            keys = json.load(keys_file)
+        p = SharpCleaner.SharpCleaner(keys)
+        p.clean_file(in_file_path)
+        self._assert_files_are_equal(out_file_path, in_file_path)
 
     def _assert_files_are_equal(self, expected, actual):
         with open(expected, 'r') as ef:
