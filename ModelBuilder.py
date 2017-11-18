@@ -1,6 +1,6 @@
+import re
 from FileModel.FileFragment import FileFragment
 from FileModel.FragmentType import FragmentType
-import re
 
 
 class ModelBuilder:
@@ -13,7 +13,7 @@ class ModelBuilder:
 
     @staticmethod
     def build(file):
-        models = ModelBuilder.split_recursive(file, [
+        model = ModelBuilder.split_recursive(file, [
             (ModelBuilder.MiltilineCommentP, FragmentType.Body),
             (ModelBuilder.LineCommentP, FragmentType.Body),
             (ModelBuilder.IfStatementP, FragmentType.IfStatement),
@@ -21,7 +21,7 @@ class ModelBuilder:
             (ModelBuilder.ElseStatementP, FragmentType.ElseStatement),
             (ModelBuilder.EndIfStatementP, FragmentType.EndIfStatement),
         ])
-        return models
+        return ModelBuilder._normalize(model)
 
     @staticmethod
     def split_recursive(file, patterns):
@@ -40,4 +40,21 @@ class ModelBuilder:
                         ModelBuilder.split_recursive(fragment, patterns[1:]))
                 else:
                     res.append(FileFragment(pattern[1], fragment))
+        return res
+
+    @staticmethod
+    def _normalize(model):
+        res = []
+        body_text = None
+        for fragment in model:
+            if fragment.type == FragmentType.Body:
+                prev_text = body_text if body_text is not None else ''
+                body_text = prev_text + fragment.text
+            else:
+                if body_text is not None:
+                    res.append(FileFragment(FragmentType.Body, body_text))
+                    body_text = None
+                res.append(fragment)
+        if body_text is not None:
+            res.append(FileFragment(FragmentType.Body, body_text))
         return res

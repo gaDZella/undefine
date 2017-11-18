@@ -98,8 +98,7 @@ class ModelBuilderTests(unittest.TestCase):
         m = ModelBuilder.build(file)
 
         self._check_Model(m, [
-            ("/* test*/", FragmentType.Body),
-            ("\n", FragmentType.Body)
+            ("/* test*/\n", FragmentType.Body)
         ])
 
     def test_LineCommentInsideMultilineComment(self):
@@ -107,8 +106,7 @@ class ModelBuilderTests(unittest.TestCase):
         m = ModelBuilder.build(file)
 
         self._check_Model(m, [
-            ("/* \n // test \n */", FragmentType.Body),
-            ("end", FragmentType.Body)
+            ("/* \n // test \n */end", FragmentType.Body)
         ])
 
     def test_IfInsideMultilineComment(self):
@@ -127,8 +125,7 @@ class ModelBuilderTests(unittest.TestCase):
 
         self._check_Model(m, [
             ("#if x ", FragmentType.IfStatement),
-            ("// comment\n", FragmentType.Body),
-            (" body \n", FragmentType.Body),
+            ("// comment\n body \n", FragmentType.Body),
             (" #endif\n", FragmentType.EndIfStatement)
         ])
 
@@ -137,9 +134,7 @@ class ModelBuilderTests(unittest.TestCase):
         m = ModelBuilder.build(file)
 
         self._check_Model(m, [
-            ("//#if x\n", FragmentType.Body),
-            ("//body\n", FragmentType.Body),
-            ("//#endif", FragmentType.Body)
+            ("//#if x\n//body\n//#endif", FragmentType.Body)
         ])
 
     def test_embeddedConditions(self):
