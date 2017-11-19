@@ -3,7 +3,7 @@ from FileModel.FileFragment import FileFragment
 from FileModel.FragmentType import FragmentType
 
 
-class ModelBuilder:
+class FlatModelBuilder:
     MiltilineCommentP = r"/\*(?:\n|.)+?\*/"
     LineCommentP = r"//.+?(?:\n|$)"
     IfStatementP = r"[ \t\f]*#[ \t\f]*if\s*.+?(?:\n|$)"
@@ -13,15 +13,15 @@ class ModelBuilder:
 
     @staticmethod
     def build(file):
-        model = ModelBuilder.split_recursive(file, [
-            (ModelBuilder.MiltilineCommentP, FragmentType.Body),
-            (ModelBuilder.LineCommentP, FragmentType.Body),
-            (ModelBuilder.IfStatementP, FragmentType.IfStatement),
-            (ModelBuilder.ElifStatementP, FragmentType.ElIfStatement),
-            (ModelBuilder.ElseStatementP, FragmentType.ElseStatement),
-            (ModelBuilder.EndIfStatementP, FragmentType.EndIfStatement),
+        model = FlatModelBuilder.split_recursive(file, [
+            (FlatModelBuilder.MiltilineCommentP, FragmentType.Body),
+            (FlatModelBuilder.LineCommentP, FragmentType.Body),
+            (FlatModelBuilder.IfStatementP, FragmentType.IfStatement),
+            (FlatModelBuilder.ElifStatementP, FragmentType.ElIfStatement),
+            (FlatModelBuilder.ElseStatementP, FragmentType.ElseStatement),
+            (FlatModelBuilder.EndIfStatementP, FragmentType.EndIfStatement),
         ])
-        return ModelBuilder._normalize(model)
+        return FlatModelBuilder._normalize(model)
 
     @staticmethod
     def split_recursive(file, patterns):
@@ -37,7 +37,7 @@ class ModelBuilder:
                     continue
                 if re.match(pattern[0], fragment) is None:
                     res.extend(
-                        ModelBuilder.split_recursive(fragment, patterns[1:]))
+                        FlatModelBuilder.split_recursive(fragment, patterns[1:]))
                 else:
                     res.append(FileFragment(pattern[1], fragment))
         return res

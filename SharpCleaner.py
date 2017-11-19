@@ -1,7 +1,7 @@
 import chardet
 import glob
 from joblib import Parallel, delayed
-from ModelBuilder import *
+from FlatModelBuilder import *
 from FileModel.FragmentType import *
 from Condition import *
 from FileModel.ConditionAccessor import ConditionAccessor
@@ -15,7 +15,7 @@ class SharpCleaner:
         encoding = self._read_encoding(file)
         with open(file, 'r', encoding=encoding) as fr:
             data = fr.read()
-        model = ModelBuilder.build(data)
+        model = FlatModelBuilder.build(data)
         result = self._clean(model)
         if result is not None:
             result['file'] = file
