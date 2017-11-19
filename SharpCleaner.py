@@ -4,7 +4,7 @@ from joblib import Parallel, delayed
 from FlatModelBuilder import *
 from FileModel.FragmentType import *
 from Condition import *
-from FileModel.ConditionAccessor import ConditionAccessor
+from FileModel import ConditionAccessor
 
 
 class SharpCleaner:
@@ -49,11 +49,11 @@ class SharpCleaner:
                     if f.type == FragmentType.IfStatement:
                         cond_stack.append([self._patch_cond(f)])
                     if f.type == FragmentType.ElIfStatement:
-                        orig_cond = ConditionAccessor.get(f)
+                        orig_cond = ConditionAccessor.get_condition(f)
                         elif_cond = self._patch_cond(f)
                         if type(cond_stack[-1][-1]) is bool:
                             f.type = FragmentType.IfStatement
-                            ConditionAccessor.set(f, elif_cond)
+                            ConditionAccessor.set_condition(f, elif_cond)
                         elif type(elif_cond) is bool:
                             elif_cond = str.format("!({0}) && {1}", cond_stack[-1][-1], orig_cond)
                             remove = SharpCleaner._should_remove(cond_stack, FragmentType.EndIfStatement)
@@ -62,7 +62,7 @@ class SharpCleaner:
                             total_lines_counter += 1
                             cond_stack.pop()
                             f.type = FragmentType.IfStatement
-                            ConditionAccessor.set(f, elif_cond)
+                            ConditionAccessor.set_condition(f, elif_cond)
                             cond_stack.append([])
                         cond_stack[-1].append(self._patch_cond(f))
                     if f.type == FragmentType.ElseStatement:
@@ -85,8 +85,8 @@ class SharpCleaner:
         } if modified else None
 
     def _patch_cond(self, f):
-        cond = Condition.simplify(ConditionAccessor.get(f), self.keys)
-        ConditionAccessor.set(f, cond)
+        cond = Condition.simplify(ConditionAccessor.get_condition(f), self.keys)
+        ConditionAccessor.set_condition(f, cond)
         return cond
 
     @staticmethod
