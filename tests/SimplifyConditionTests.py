@@ -1,5 +1,5 @@
 import unittest
-from Condition import *
+import Condition
 
 
 class SimplifyConditionTests(unittest.TestCase):
