@@ -4,12 +4,87 @@ from FileModel.ConditionBlock import ConditionBlock
 from FileModel.Branch import Branch
 from tests.FlatModelBuilderTests import check_fragments
 from FileModel.FragmentType import FragmentType
-from FileModel.FileFragment import  FileFragment
+from FileModel.FileFragment import FileFragment
 
 
 class BlockModelBuilderTests(unittest.TestCase):
+    def test_empty(self):
+        b = self._build_Model([])
 
-    def test_1(self):
+        self._check_Model(b, [])
+
+    def test_single_if_block(self):
+        b = self._build_Model([
+            ("#if a", FragmentType.IfStatement),
+            ("a body", FragmentType.Body),
+            ("#endif", FragmentType.EndIfStatement)
+        ])
+
+        self._check_Model(b, [
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
+                    [
+                        "a body"
+                    ]),
+                [],
+                "#endif"
+            )
+        ])
+
+    def test_single_if_block_with_context(self):
+        b = self._build_Model([
+            ("before", FragmentType.Body),
+            ("#if a", FragmentType.IfStatement),
+            ("a body", FragmentType.Body),
+            ("#endif", FragmentType.EndIfStatement),
+            ("after", FragmentType.Body),
+        ])
+
+        self._check_Model(b, [
+            "before",
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
+                    [
+                        "a body"
+                    ]),
+                [],
+                "#endif"
+            ),
+            "after"
+        ])
+
+    def test_nested_single_if_block(self):
+        b = self._build_Model([
+            ("#if a", FragmentType.IfStatement),
+            ("#if b", FragmentType.IfStatement),
+            ("b body", FragmentType.Body),
+            ("#endif", FragmentType.EndIfStatement),
+            ("#endif", FragmentType.EndIfStatement)
+        ])
+
+        self._check_Model(b, [
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
+                    [
+                        ConditionBlock(
+                            Branch(
+                                FileFragment(FragmentType.IfStatement, "#if b"),
+                                [
+                                    "b body"
+                                ]),
+                            [],
+                            "#endif"
+                            )
+                    ]),
+                [],
+                "#endif"
+            )
+        ])
+
+    def test_single_if_else_block(self):
         b = self._build_Model([
             ("#if a", FragmentType.IfStatement),
             ("a body", FragmentType.Body),
@@ -20,18 +95,17 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(FileFragment(
-                    FragmentType.IfStatement, "#if a"),
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
                     [
                         "a body"
                     ]),
                 [
-                    Branch(FileFragment(
-                        FragmentType.ElseStatement, "#else"),
+                    Branch(
+                        FileFragment(FragmentType.ElseStatement, "#else"),
                         [
                             "else body"
                         ]),
-
                 ],
                 "#endif"
             )
