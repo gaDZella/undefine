@@ -1,5 +1,5 @@
 import unittest
-from BlockModelBuilder import BlockModelBuilder
+import BlockModelBuilder
 from FileModel.ConditionBlock import ConditionBlock
 from FileModel.Branch import Branch
 from tests.FlatModelBuilderTests import check_fragments
@@ -37,7 +37,8 @@ class BlockModelBuilderTests(unittest.TestCase):
             )
         ])
 
-    def _build_Model(self, tuples):
+    @staticmethod
+    def _build_Model(tuples):
         fs = (FileFragment(t[1], t[0]) for t in tuples)
         return list(BlockModelBuilder.build(fs))
 
