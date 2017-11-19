@@ -1,5 +1,5 @@
 import unittest
-from FlatModelBuilder import FlatModelBuilder
+import FlatModelBuilder
 from FileModel.FragmentType import FragmentType
 from FileModel.FileFragment import FileFragment
 

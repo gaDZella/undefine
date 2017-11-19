@@ -1,7 +1,7 @@
 import chardet
 import glob
 from joblib import Parallel, delayed
-from FlatModelBuilder import *
+import FlatModelBuilder
 from FileModel.FragmentType import *
 from Condition import *
 from FileModel import ConditionAccessor
