@@ -3,7 +3,7 @@ from FileModel.Branch import Branch
 from FileModel.ConditionBlock import ConditionBlock
 
 
-class WithCurrentGen(object):
+class WithCurrentIter(object):
 
     def __init__(self, it):
         self.__it = it
@@ -63,7 +63,7 @@ def _build_block(it, if_f):
 
 
 def _create_iterator(obj):
-    return WithCurrentGen(iter(obj))
+    return WithCurrentIter(iter(obj))
 
 
 
