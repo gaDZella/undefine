@@ -32,6 +32,22 @@ class BlockModelBuilderTests(unittest.TestCase):
             )
         ])
 
+    def test_single_empty_if_block(self):
+        b = self._build_Model([
+            ("#if a", FragmentType.IfStatement),
+            ("#endif", FragmentType.EndIfStatement)
+        ])
+
+        self._check_Model(b, [
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
+                    []),
+                [],
+                "#endif"
+            )
+        ])
+
     def test_single_if_block_with_context(self):
         b = self._build_Model([
             ("before", FragmentType.Body),
@@ -108,6 +124,106 @@ class BlockModelBuilderTests(unittest.TestCase):
                         ]),
                 ],
                 "#endif"
+            )
+        ])
+
+    def test_single_if_elif_elif_else_block(self):
+        b = self._build_Model([
+            ("#if a", FragmentType.IfStatement),
+            ("a body", FragmentType.Body),
+            ("#elif b", FragmentType.ElIfStatement),
+            ("b body", FragmentType.Body),
+            ("#elif c", FragmentType.ElIfStatement),
+            ("c body", FragmentType.Body),
+            ("#else", FragmentType.ElseStatement),
+            ("else body", FragmentType.Body),
+            ("#endif", FragmentType.EndIfStatement)
+        ])
+
+        self._check_Model(b, [
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "#if a"),
+                    [
+                        "a body"
+                    ]),
+                [
+                    Branch(
+                        FileFragment(FragmentType.ElIfStatement, "#elif b"),
+                        [
+                            "b body"
+                        ]),
+                    Branch(
+                        FileFragment(FragmentType.ElIfStatement, "#elif c"),
+                        [
+                            "c body"
+                        ]),
+                    Branch(
+                        FileFragment(FragmentType.ElseStatement, "#else"),
+                        [
+                            "else body"
+                        ]),
+                ],
+                "#endif"
+            )
+        ])
+
+    def test_complex_nested_blocks(self):
+        b = self._build_Model([
+            ("if a", FragmentType.IfStatement),
+            ("a body", FragmentType.Body),
+            ("elif b", FragmentType.ElIfStatement),
+            ("b body", FragmentType.Body),
+            ("if aa", FragmentType.IfStatement),
+            ("if aaa", FragmentType.IfStatement),
+            ("aaa body", FragmentType.Body),
+            ("endif aaa", FragmentType.EndIfStatement),
+            ("else", FragmentType.ElseStatement),
+            ("else aa body", FragmentType.Body),
+            ("endif aa", FragmentType.EndIfStatement),
+            ("b body2", FragmentType.Body),
+            ("endif b", FragmentType.EndIfStatement)
+        ])
+
+        self._check_Model(b, [
+            ConditionBlock(
+                Branch(
+                    FileFragment(FragmentType.IfStatement, "if a"),
+                    [
+                        "a body"
+                    ]),
+                [
+                    Branch(
+                        FileFragment(FragmentType.ElIfStatement, "elif b"),
+                        [
+                            "b body",
+                            ConditionBlock(
+                                Branch(
+                                    FileFragment(FragmentType.IfStatement, "if aa"),
+                                    [
+                                        ConditionBlock(
+                                            Branch(
+                                                FileFragment(FragmentType.IfStatement, "if aaa"),
+                                                [
+                                                    "aaa body"
+                                                ]),
+                                            [],
+                                            "endif aaa"
+                                        ),
+                                    ]),
+                                [
+                                    Branch(
+                                        FileFragment(FragmentType.ElseStatement, "else"),
+                                        [
+                                            "else aa body"
+                                        ])
+                                ],
+                                "endif aa"
+                            ),
+                            "b body2"
+                        ])
+                ],
+                "endif b"
             )
         ])
 
