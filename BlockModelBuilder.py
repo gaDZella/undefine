@@ -3,6 +3,10 @@ from FileModel.Branch import Branch
 from FileModel.ConditionBlock import ConditionBlock
 
 
+class IntegrityException(Exception):
+    pass
+
+
 class WithCurrentIter(object):
 
     def __init__(self, it):
@@ -12,7 +16,7 @@ class WithCurrentIter(object):
         return self
 
     def __next__(self):
-        self.current = next(self.__it)
+        self.current = next(self.__it, None)
         return self.current
 
     def __call__(self):
@@ -29,20 +33,22 @@ Block_terminators = [
 def build(model):
     it = _create_iterator(model)
     yield from _build(it)
+    if it.current is not None:
+        raise IntegrityException()
 
 
 def _build(it):
-    f = next(it, None)
+    f = next(it)
     while f is not None:
         if f.type in Block_terminators:
             break
         if f.type == FragmentType.IfStatement:
             yield _build_block(it, f)
         elif f.type != FragmentType.Body:
-            raise Exception()
+            raise IntegrityException()
         else:
             yield f.text
-        f = next(it, None)
+        f = next(it)
 
 
 def _build_block(it, if_f):
@@ -52,13 +58,13 @@ def _build_block(it, if_f):
     next_branches = []
     while f is not None and f.type != FragmentType.EndIfStatement:
         if f.type == FragmentType.Body:
-            raise Exception()
+            raise IntegrityException()
         cond = f
         body = list(_build(it))
         f = it.current
         next_branches.append(Branch(cond, body))
-    if f.type != FragmentType.EndIfStatement:
-        raise Exception()
+    if f is None or f.type != FragmentType.EndIfStatement:
+        raise IntegrityException()
     return ConditionBlock(Branch(start_cond, start_body), next_branches, f.text)
 
 
