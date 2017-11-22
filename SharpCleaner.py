@@ -5,6 +5,7 @@ import FlatModelBuilder
 import Condition
 from FileModel.FragmentType import FragmentType
 from FileModel import ConditionAccessor
+from CleanResult import CleanResult
 
 
 class SharpCleaner:
@@ -18,10 +19,10 @@ class SharpCleaner:
         model = FlatModelBuilder.build(data)
         result = self._clean(model)
         if result is not None:
-            result['file'] = file
-        if apply_changes and (result is not None and result['success']):
+            result.file = file
+        if apply_changes and (result is not None and result.error is None):
             with open(file, 'w', encoding=encoding) as fw:
-                fw.write(result['text'])
+                fw.write(result.text)
         return result
 
     def clean_folder(self, folder, apply_changes=True):
@@ -77,12 +78,10 @@ class SharpCleaner:
                         cond_stack.pop()
         except:
             error = True
-        return {
-            'success': not error,
-            'text': text,
-            'body_lines': body_lines_counter,
-            'total_lines': total_lines_counter
-        } if modified else None
+        return CleanResult(text,
+                           "error" if error else None,
+                           body_lines_counter,
+                           total_lines_counter) if modified else None
 
     def _patch_cond(self, f):
         cond = Condition.simplify(ConditionAccessor.get_condition(f), self.keys)
