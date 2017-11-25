@@ -25,21 +25,21 @@ def _do_clean(p_args,  apply_changes):
 
 
 def _show_report(results, completed_report_format_string):
-    body_lines = 0
+    code_lines = 0
     total_lines = 0
     files_count = 0
     error_files = []
     for result in results:
         if result is not None:
-            if not result['success']:
-                error_files.append(result['file'])
+            if result.error is not None:
+                error_files.append(result.file)
             else:
-                body_lines += result['body_lines']
-                total_lines += result['total_lines']
-                if result['total_lines'] > 0:
+                code_lines += result.code_lines
+                total_lines += result.total_lines
+                if result.total_lines > 0:
                     files_count += 1
     print(str.format("Completed. " + completed_report_format_string,
-                     body_lines, files_count, total_lines))
+                     code_lines, files_count, total_lines))
     if len(error_files) > 0:
         print("Failed on these files:")
         for file in error_files:

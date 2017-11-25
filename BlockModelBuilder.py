@@ -3,7 +3,7 @@ from FileModel.Branch import Branch
 from FileModel.ConditionBlock import ConditionBlock
 
 
-class IntegrityException(Exception):
+class SyntaxException(Exception):
     pass
 
 
@@ -34,7 +34,7 @@ def build(model):
     it = _create_iterator(model)
     yield from _build(it)
     if it.current is not None:
-        raise IntegrityException()
+        raise SyntaxException()
 
 
 def _build(it):
@@ -45,7 +45,7 @@ def _build(it):
         if f.type == FragmentType.IfStatement:
             yield _build_block(it, f)
         elif f.type != FragmentType.Body:
-            raise IntegrityException()
+            raise SyntaxException()
         else:
             yield f.text
         f = next(it)
@@ -58,13 +58,13 @@ def _build_block(it, if_f):
     next_branches = []
     while f is not None and f.type != FragmentType.EndIfStatement:
         if f.type == FragmentType.Body:
-            raise IntegrityException()
+            raise SyntaxException()
         cond = f
         body = list(_build(it))
         f = it.current
         next_branches.append(Branch(cond, body))
     if f is None or f.type != FragmentType.EndIfStatement:
-        raise IntegrityException()
+        raise SyntaxException()
     return ConditionBlock(Branch(start_cond, start_body), next_branches, f.text)
 
 

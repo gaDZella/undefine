@@ -4,6 +4,7 @@ from joblib import Parallel, delayed
 import FlatModelBuilder
 import BlockModelBuilder
 import Processor
+from CleanResult import CleanResult
 
 
 class SharpCleaner:
@@ -28,8 +29,15 @@ class SharpCleaner:
         return Parallel(n_jobs=-1)(delayed(self.clean_file)(file, apply_changes) for file in files)
 
     def _clean(self, fragments):
-        model = BlockModelBuilder.build(fragments)
-        return Processor.process(model, self.keys)
+        try:
+            model = BlockModelBuilder.build(fragments)
+        except BlockModelBuilder.SyntaxException:
+            return CleanResult(None, "Syntax Error", 0, 0)
+        try:
+            return Processor.process(model, self.keys)
+        except:
+            return CleanResult(None, "Undefined Error", 0, 0)
+
 
     @staticmethod
     def _read_encoding(file):

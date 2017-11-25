@@ -1,5 +1,5 @@
 import unittest
-from BlockModelBuilder import build, IntegrityException
+from BlockModelBuilder import build, SyntaxException
 from FileModel.ConditionBlock import ConditionBlock
 from FileModel.Branch import Branch
 from tests.FlatModelBuilderTests import check_fragments
@@ -228,27 +228,27 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
     def test_exception_no_endif(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("if a", FragmentType.IfStatement)
         ]))
 
     def test_exception_elif_only(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("elif a", FragmentType.ElIfStatement)
         ]))
 
     def test_exception_else_only(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("else", FragmentType.ElseStatement)
         ]))
 
     def test_exception_endif_only(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("endif", FragmentType.EndIfStatement)
         ]))
 
     def test_exception_2_endif(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("if a", FragmentType.IfStatement),
             ("a body", FragmentType.Body),
             ("endif", FragmentType.EndIfStatement),
@@ -256,7 +256,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ]))
 
     def test_exception_nested_not_paired(self):
-        self.assertRaises(IntegrityException, lambda: self._build_Model([
+        self.assertRaises(SyntaxException, lambda: self._build_Model([
             ("if a", FragmentType.IfStatement),
             ("if aa", FragmentType.IfStatement),
             ("aa body", FragmentType.Body),
