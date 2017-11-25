@@ -17,7 +17,7 @@ def get_condition(frag):
 
 def set_condition(frag, value):
     pattern = ""
-    fmt = ""
+    fmt = None
     if frag.type is FragmentType.IfStatement:
         pattern = IfSearchPattern
         fmt = "#if {0}\n"
@@ -28,12 +28,13 @@ def set_condition(frag, value):
 
 
 def _set(frag, value, pattern, fmt):
-    if frag.text is not None:
-        res = re.findall(pattern, frag.text)
-        if len(res) > 0:
-            frag.text = frag.text.replace(res[0], str(value))
-            return
-    frag.text = str.format(fmt, value)
+    if fmt is not None:
+        if frag.text is not None:
+            res = re.findall(pattern, frag.text)
+            if len(res) > 0:
+                frag.text = frag.text.replace(res[0], str(value))
+                return
+        frag.text = str.format(fmt, value)
 
 
 

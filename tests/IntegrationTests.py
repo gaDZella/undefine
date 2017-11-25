@@ -48,8 +48,8 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_10(self):
         self._test_chose(10)
 
-    def _test_choice_11(self):
-            self._test_chose(11)
+    def test_choice_11(self):
+        self._test_chose(11)
 
     def _test_chose(self, name):
         in_file_path = str.format("{}/{}.in.cs", self.test_dir, name)
