@@ -57,6 +57,10 @@ def _add_name_definition_args(p):
 
 
 parser = argparse.ArgumentParser()
+
+parser.add_argument('path', default=os.getcwd(), metavar='path', nargs='?',
+                    help='working path, current working folder by default')
+
 subparsers = parser.add_subparsers(help='commands')
 
 parser_check = subparsers.add_parser('test', help='test command')
@@ -69,9 +73,6 @@ parser_clean.set_defaults(act=apply)
 
 parser_stats = subparsers.add_parser('scan', help='scan command')
 parser_stats.set_defaults(act=scan)
-
-parser.add_argument('path', default=os.getcwd(), metavar='path', nargs='?',
-                    help='working path, current working folder by default')
 
 args = parser.parse_args()
 if hasattr(args, 'act'):

@@ -21,6 +21,9 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_1(self):
         self._test_chose(1)
 
+    def test_choice_1_1(self):
+        self._test_chose("1_1")
+
     def test_choice_2(self):
         self._test_chose(2)
 

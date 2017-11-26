@@ -50,7 +50,7 @@ def _process_block(b, res, keys):
             res.text += branch.condition.text
             _process_body(branch.body, res, keys)
         last_cond = cond
-    if count > 1:
+    if type(last_cond) is not bool or count > 1:
         res.text += b.end
 
 
