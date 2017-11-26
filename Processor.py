@@ -1,6 +1,6 @@
-from FileModel.FragmentType import FragmentType
-from FileModel.Block import Block
-from FileModel import ConditionAccessor
+from Model.FragmentType import FragmentType
+from Model.Block import Block
+from Model import ConditionAccessor
 from CleanResult import CleanResult
 import Condition
 import LineCounter

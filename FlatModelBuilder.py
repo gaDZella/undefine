@@ -1,6 +1,6 @@
 import re
-from FileModel.FileFragment import FileFragment
-from FileModel.FragmentType import FragmentType
+from Model.Fragment import Fragment
+from Model.FragmentType import FragmentType
 
 
 MiltilineCommentP = r"/\*(?:\n|.)+?\*/"
@@ -24,7 +24,7 @@ def build(file):
 
 
 def split_recursive(file, patterns):
-    res = [FileFragment(FragmentType.Body, file)]
+    res = [Fragment(FragmentType.Body, file)]
     left_count = len(patterns)
     if left_count is not 0:
         res = []
@@ -38,7 +38,7 @@ def split_recursive(file, patterns):
                 res.extend(
                     split_recursive(fragment, patterns[1:]))
             else:
-                res.append(FileFragment(pattern[1], fragment))
+                res.append(Fragment(pattern[1], fragment))
     return res
 
 
@@ -51,9 +51,9 @@ def _normalize(model):
             body_text = prev_text + fragment.text
         else:
             if body_text is not None:
-                res.append(FileFragment(FragmentType.Body, body_text))
+                res.append(Fragment(FragmentType.Body, body_text))
                 body_text = None
             res.append(fragment)
     if body_text is not None:
-        res.append(FileFragment(FragmentType.Body, body_text))
+        res.append(Fragment(FragmentType.Body, body_text))
     return res

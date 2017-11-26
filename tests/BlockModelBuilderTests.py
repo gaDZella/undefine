@@ -1,10 +1,10 @@
 import unittest
 from BlockModelBuilder import build, SyntaxException
-from FileModel.Block import Block
-from FileModel.Branch import Branch
+from Model.Block import Block
+from Model.Branch import Branch
 from tests.FlatModelBuilderTests import check_fragments
-from FileModel.FragmentType import FragmentType
-from FileModel.FileFragment import FileFragment
+from Model.FragmentType import FragmentType
+from Model.Fragment import Fragment
 
 
 class BlockModelBuilderTests(unittest.TestCase):
@@ -24,7 +24,7 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [
                             "a body"
                         ])
@@ -43,7 +43,7 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [])
                 ],
                 "#endif"
@@ -64,7 +64,7 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [
                             "a body"
                         ])
@@ -87,12 +87,12 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [
                             Block(
                                 [
                                     Branch(
-                                        FileFragment(FragmentType.IfStatement, "#if b"),
+                                        Fragment(FragmentType.IfStatement, "#if b"),
                                         [
                                             "b body"
                                         ])
@@ -118,12 +118,12 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [
                             "a body"
                         ]),
                     Branch(
-                        FileFragment(FragmentType.ElseStatement, "#else"),
+                        Fragment(FragmentType.ElseStatement, "#else"),
                         [
                             "else body"
                         ])
@@ -149,22 +149,22 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        Fragment(FragmentType.IfStatement, "#if a"),
                         [
                             "a body"
                         ]),
                     Branch(
-                        FileFragment(FragmentType.ElIfStatement, "#elif b"),
+                        Fragment(FragmentType.ElIfStatement, "#elif b"),
                         [
                             "b body"
                         ]),
                     Branch(
-                        FileFragment(FragmentType.ElIfStatement, "#elif c"),
+                        Fragment(FragmentType.ElIfStatement, "#elif c"),
                         [
                             "c body"
                         ]),
                     Branch(
-                        FileFragment(FragmentType.ElseStatement, "#else"),
+                        Fragment(FragmentType.ElseStatement, "#else"),
                         [
                             "else body"
                         ]),
@@ -194,23 +194,23 @@ class BlockModelBuilderTests(unittest.TestCase):
             Block(
                 [
                     Branch(
-                        FileFragment(FragmentType.IfStatement, "if a"),
+                        Fragment(FragmentType.IfStatement, "if a"),
                         [
                             "a body"
                         ]),
                     Branch(
-                        FileFragment(FragmentType.ElIfStatement, "elif b"),
+                        Fragment(FragmentType.ElIfStatement, "elif b"),
                         [
                             "b body",
                             Block(
                                 [
                                     Branch(
-                                        FileFragment(FragmentType.IfStatement, "if aa"),
+                                        Fragment(FragmentType.IfStatement, "if aa"),
                                         [
                                             Block(
                                                 [
                                                     Branch(
-                                                        FileFragment(FragmentType.IfStatement, "if aaa"),
+                                                        Fragment(FragmentType.IfStatement, "if aaa"),
                                                         [
                                                             "aaa body"
                                                         ])
@@ -219,7 +219,7 @@ class BlockModelBuilderTests(unittest.TestCase):
                                             ),
                                         ]),
                                     Branch(
-                                        FileFragment(FragmentType.ElseStatement, "else"),
+                                        Fragment(FragmentType.ElseStatement, "else"),
                                         [
                                             "else aa body"
                                         ])
@@ -273,7 +273,7 @@ class BlockModelBuilderTests(unittest.TestCase):
 
     @staticmethod
     def _build_Model(tuples):
-        fs = (FileFragment(t[1], t[0]) for t in tuples)
+        fs = (Fragment(t[1], t[0]) for t in tuples)
         return list(build(fs))
 
     def _check_Model(self, act, exp):

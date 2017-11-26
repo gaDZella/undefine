@@ -1,4 +1,4 @@
-from FileModel.Block import Block
+from Model.Block import Block
 
 
 def count_body(body):

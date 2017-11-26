@@ -1,7 +1,7 @@
 import unittest
 import FlatModelBuilder
-from FileModel.FragmentType import FragmentType
-from FileModel.FileFragment import FileFragment
+from Model.FragmentType import FragmentType
+from Model.Fragment import Fragment
 
 
 class FlatModelBuilderTests(unittest.TestCase):
@@ -204,7 +204,7 @@ class FlatModelBuilderTests(unittest.TestCase):
 
     def _check_Model(self, act, exp):
         self.assertEqual(len(act), len(exp))
-        exp = list(FileFragment(t[1], t[0]) for t in exp)
+        exp = list(Fragment(t[1], t[0]) for t in exp)
         for i in range(0, len(exp)):
             check_fragments(self, act[i], exp[i])
 

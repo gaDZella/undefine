@@ -1,4 +1,4 @@
-class FileFragment:
+class Fragment:
 
     def __init__(self, _type, text):
         self.type = _type

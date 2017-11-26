@@ -1,6 +1,6 @@
-from FileModel.FragmentType import FragmentType
-from FileModel.Branch import Branch
-from FileModel.Block import Block
+from Model.FragmentType import FragmentType
+from Model.Branch import Branch
+from Model.Block import Block
 
 
 class SyntaxException(Exception):

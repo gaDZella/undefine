@@ -1,5 +1,5 @@
 import re
-from FileModel.FragmentType import FragmentType
+from Model.FragmentType import FragmentType
 
 
 IfSearchPattern = r"[ \t\f]*#\s*if\s*(.+?)(?:\n|$)"
