@@ -3,6 +3,7 @@ from FileModel.Block import Block
 from FileModel import ConditionAccessor
 from CleanResult import CleanResult
 import Condition
+import LineCounter
 
 
 def process(model, keys):
@@ -30,6 +31,8 @@ def _process_block(b, res, keys):
             if i == 0:
                 if cond:
                     _process_body(branch.body, res, keys)
+                else:
+                    res.code_lines += LineCounter.count_body(branch.body)
                 if count > 1:
                     next_f = branches[i + 1].condition
                     next_cond = _patch_cond(next_f, keys, cond)
@@ -39,6 +42,7 @@ def _process_block(b, res, keys):
                     return
             else:
                 if cond:
+                    res.code_lines += sum([LineCounter.count_body(b.body) for b in branches[i + 1:]])
                     if branch.condition.type == FragmentType.ElseStatement:
                         res.text += "#endif\n"
                         _process_body(branch.body, res, keys)
@@ -46,6 +50,9 @@ def _process_block(b, res, keys):
                     res.text += "#else\n"
                     _process_body(branch.body, res, keys)
                     break
+                else:
+                    res.code_lines = LineCounter.count_body(branch.body)
+
         else:
             res.text += branch.condition.text
             _process_body(branch.body, res, keys)

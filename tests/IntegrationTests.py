@@ -4,6 +4,7 @@ import SharpCleaner
 import tempfile
 import shutil
 import os
+from CleanResult import CleanResult
 
 
 class IntegrationTests(unittest.TestCase):
@@ -19,54 +20,60 @@ class IntegrationTests(unittest.TestCase):
         shutil.rmtree(cls.test_dir, ignore_errors=True)
 
     def test_choice_1(self):
-        self._test_chose(1)
+        self._test_choice(1)
 
     def test_choice_1_1(self):
-        self._test_chose("1_1")
+        self._test_choice("1_1")
 
     def test_choice_2(self):
-        self._test_chose(2)
+        self._test_choice(2)
 
     def _test_choice_3_encodings(self):
-        self._test_chose("3_encodings")
+        self._test_choice("3_encodings")
 
     def test_choice_4(self):
-        self._test_chose(4)
+        self._test_choice(4)
 
     def test_choice_5(self):
-        self._test_chose(5)
+        self._test_choice(5)
 
     def test_choice_6(self):
-        self._test_chose(6)
+        self._test_choice(6)
 
     def test_choice_7(self):
-        self._test_chose(7)
+        self._test_choice(7)
 
     def test_choice_8(self):
-        self._test_chose(8)
+        self._test_choice(8)
 
     def test_choice_9(self):
-        self._test_chose(9)
+        self._test_choice(9)
 
     def test_choice_10(self):
-        self._test_chose(10)
+        self._test_choice(10)
 
     def test_choice_11(self):
-        self._test_chose(11)
+        self._test_choice(11)
 
-    def _test_chose(self, name):
+    def _test_choice(self, name):
         in_file_path = str.format("{}/{}.in.cs", self.test_dir, name)
         out_file_path = str.format("{}/{}.out.cs", self.test_dir, name)
         keys_json_path = str.format("{}/{}.args.json", self.test_dir, name)
+        res_json_path = str.format("{}/{}.res.json", self.test_dir, name)
         with open(keys_json_path) as keys_file:
             keys = json.load(keys_file)
-        p = SharpCleaner.SharpCleaner(keys)
-        p.clean_file(in_file_path)
-        self._assert_files_are_equal(out_file_path, in_file_path)
+        with open(res_json_path) as res_file:
+            res = json.load(res_file)
+        with open(out_file_path, 'r') as out_file:
+            exp_text = out_file.read()
 
-    def _assert_files_are_equal(self, expected, actual):
-        with open(expected, 'r') as ef:
-            e_data = ef.read()
-        with open(actual, 'r') as af:
-            a_data = af.read()
-        self.assertMultiLineEqual(a_data, e_data)
+        exp_res = CleanResult(exp_text, res["error"], res["code_lines"], res["total_lines"])
+        p = SharpCleaner.SharpCleaner(keys)
+        act_res = p.clean_file(in_file_path, False)
+        self._assert_results_are_equal(exp_res, act_res)
+
+    def _assert_results_are_equal(self, exp, act):
+        self.assertEqual(exp.error, act.error, "error")
+        self.assertMultiLineEqual(exp.text, act.text, "text")
+        self.assertEqual(exp.total_lines, act.total_lines, "total_lines")
+        self.assertEqual(exp.code_lines, act.code_lines, "code_lines")
