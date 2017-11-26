@@ -1,5 +1,5 @@
 from FileModel.FragmentType import FragmentType
-from FileModel.ConditionBlock import ConditionBlock
+from FileModel.Block import Block
 from FileModel import ConditionAccessor
 from CleanResult import CleanResult
 import Condition
@@ -13,7 +13,7 @@ def process(model, keys):
 
 def _process_body(body, res, keys):
     for m in body:
-        if type(m) is ConditionBlock:
+        if type(m) is Block:
             _process_block(m, res, keys)
         else:
             res.text += m
@@ -35,7 +35,7 @@ def _process_block(b, res, keys):
                     next_cond = _patch_cond(next_f, keys, cond)
                     next_f.type = FragmentType.IfStatement
                     ConditionAccessor.set_condition(next_f, next_cond)
-                    _process_block(ConditionBlock(branches[i + 1:], b.end), res, keys)
+                    _process_block(Block(branches[i + 1:], b.end), res, keys)
                     return
             else:
                 if cond:

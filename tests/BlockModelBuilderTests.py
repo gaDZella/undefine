@@ -1,6 +1,6 @@
 import unittest
 from BlockModelBuilder import build, SyntaxException
-from FileModel.ConditionBlock import ConditionBlock
+from FileModel.Block import Block
 from FileModel.Branch import Branch
 from tests.FlatModelBuilderTests import check_fragments
 from FileModel.FragmentType import FragmentType
@@ -21,7 +21,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
@@ -40,7 +40,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
@@ -61,7 +61,7 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             "before",
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
@@ -84,12 +84,12 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
                         [
-                            ConditionBlock(
+                            Block(
                                 [
                                     Branch(
                                         FileFragment(FragmentType.IfStatement, "#if b"),
@@ -115,7 +115,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
@@ -146,7 +146,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "#if a"),
@@ -191,7 +191,7 @@ class BlockModelBuilderTests(unittest.TestCase):
         ])
 
         self._check_Model(b, [
-            ConditionBlock(
+            Block(
                 [
                     Branch(
                         FileFragment(FragmentType.IfStatement, "if a"),
@@ -202,12 +202,12 @@ class BlockModelBuilderTests(unittest.TestCase):
                         FileFragment(FragmentType.ElIfStatement, "elif b"),
                         [
                             "b body",
-                            ConditionBlock(
+                            Block(
                                 [
                                     Branch(
                                         FileFragment(FragmentType.IfStatement, "if aa"),
                                         [
-                                            ConditionBlock(
+                                            Block(
                                                 [
                                                     Branch(
                                                         FileFragment(FragmentType.IfStatement, "if aaa"),
@@ -283,7 +283,7 @@ class BlockModelBuilderTests(unittest.TestCase):
             act_i = act[i]
             exp_i = exp[i]
             self.assertEqual(type(act_i), type(exp_i))
-            if type(act_i) is ConditionBlock:
+            if type(act_i) is Block:
                 self._check_Block(act_i, exp_i)
             else:
                 self.assertEqual(act_i, exp_i)
