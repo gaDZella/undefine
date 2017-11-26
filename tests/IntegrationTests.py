@@ -55,6 +55,9 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_11(self):
         self._test_choice(11)
 
+    def test_choice_syntax_error(self):
+        self._test_choice("syntax_error")
+
     def _test_choice(self, name):
         in_file_path = str.format("{}/{}.in.cs", self.test_dir, name)
         out_file_path = str.format("{}/{}.out.cs", self.test_dir, name)
@@ -74,6 +77,7 @@ class IntegrationTests(unittest.TestCase):
 
     def _assert_results_are_equal(self, exp, act):
         self.assertEqual(exp.error, act.error, "error")
-        self.assertMultiLineEqual(exp.text, act.text, "text")
+        if exp.error is None:
+            self.assertMultiLineEqual(exp.text, act.text, "text")
         self.assertEqual(exp.total_lines, act.total_lines, "total_lines")
         self.assertEqual(exp.code_lines, act.code_lines, "code_lines")

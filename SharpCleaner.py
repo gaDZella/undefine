@@ -20,7 +20,8 @@ class SharpCleaner:
         result = self._clean(model)
         if result is not None:
             result.file = file
-            result.total_lines = LineCounter.count_text(data) - LineCounter.count_text(result.text)
+            if result.error is None:
+                result.total_lines = LineCounter.count_text(data) - LineCounter.count_text(result.text)
         if apply_changes and (result is not None and result.error is None):
             with open(file, 'w', encoding=encoding) as fw:
                 fw.write(result.text)
@@ -33,10 +34,9 @@ class SharpCleaner:
     def _clean(self, fragments):
         try:
             model = BlockModelBuilder.build(fragments)
+            return Processor.process(model, self.keys)
         except BlockModelBuilder.SyntaxException:
             return CleanResult(None, "Syntax Error", 0, 0)
-        try:
-            return Processor.process(model, self.keys)
         except:
             return CleanResult(None, "Undefined Error", 0, 0)
 
