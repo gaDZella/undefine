@@ -56,22 +56,27 @@ def _add_name_definition_args(p):
     p.add_argument('-u', '--undef', action='append', metavar='name', help='undefine global preprocessor var')
 
 
-parser = argparse.ArgumentParser()
+def _add_working_path_args(p):
+    p.add_argument('path', default=os.getcwd(), metavar='path', nargs='?',
+                        help='working path, current working folder by default')
 
-parser.add_argument('path', default=os.getcwd(), metavar='path', nargs='?',
-                    help='working path, current working folder by default')
+
+parser = argparse.ArgumentParser()
 
 subparsers = parser.add_subparsers(help='commands')
 
 parser_check = subparsers.add_parser('test', help='test command')
 _add_name_definition_args(parser_check)
+_add_working_path_args(parser_check)
 parser_check.set_defaults(act=test)
 
 parser_clean = subparsers.add_parser('apply', help='apply command')
 _add_name_definition_args(parser_clean)
+_add_working_path_args(parser_clean)
 parser_clean.set_defaults(act=apply)
 
 parser_stats = subparsers.add_parser('scan', help='scan command')
+_add_working_path_args(parser_stats)
 parser_stats.set_defaults(act=scan)
 
 args = parser.parse_args()
