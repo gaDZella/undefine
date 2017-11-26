@@ -22,12 +22,13 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    [
-                        "a body"
-                    ]),
-                [],
+                [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [
+                            "a body"
+                        ])
+                ],
                 "#endif"
             )
         ])
@@ -40,10 +41,11 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    []),
-                [],
+                [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [])
+                ],
                 "#endif"
             )
         ])
@@ -60,12 +62,13 @@ class BlockModelBuilderTests(unittest.TestCase):
         self._check_Model(b, [
             "before",
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    [
-                        "a body"
-                    ]),
-                [],
+                [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [
+                            "a body"
+                        ])
+                ],
                 "#endif"
             ),
             "after"
@@ -82,20 +85,22 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    [
-                        ConditionBlock(
-                            Branch(
-                                FileFragment(FragmentType.IfStatement, "#if b"),
+                [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [
+                            ConditionBlock(
                                 [
-                                    "b body"
-                                ]),
-                            [],
-                            "#endif"
+                                    Branch(
+                                        FileFragment(FragmentType.IfStatement, "#if b"),
+                                        [
+                                            "b body"
+                                        ])
+                                ],
+                                "#endif"
                             )
-                    ]),
-                [],
+                        ])
+                ],
                 "#endif"
             )
         ])
@@ -111,17 +116,17 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    [
-                        "a body"
-                    ]),
                 [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [
+                            "a body"
+                        ]),
                     Branch(
                         FileFragment(FragmentType.ElseStatement, "#else"),
                         [
                             "else body"
-                        ]),
+                        ])
                 ],
                 "#endif"
             )
@@ -142,12 +147,12 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "#if a"),
-                    [
-                        "a body"
-                    ]),
                 [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "#if a"),
+                        [
+                            "a body"
+                        ]),
                     Branch(
                         FileFragment(FragmentType.ElIfStatement, "#elif b"),
                         [
@@ -187,31 +192,32 @@ class BlockModelBuilderTests(unittest.TestCase):
 
         self._check_Model(b, [
             ConditionBlock(
-                Branch(
-                    FileFragment(FragmentType.IfStatement, "if a"),
-                    [
-                        "a body"
-                    ]),
                 [
+                    Branch(
+                        FileFragment(FragmentType.IfStatement, "if a"),
+                        [
+                            "a body"
+                        ]),
                     Branch(
                         FileFragment(FragmentType.ElIfStatement, "elif b"),
                         [
                             "b body",
                             ConditionBlock(
-                                Branch(
-                                    FileFragment(FragmentType.IfStatement, "if aa"),
-                                    [
-                                        ConditionBlock(
-                                            Branch(
-                                                FileFragment(FragmentType.IfStatement, "if aaa"),
-                                                [
-                                                    "aaa body"
-                                                ]),
-                                            [],
-                                            "endif aaa"
-                                        ),
-                                    ]),
                                 [
+                                    Branch(
+                                        FileFragment(FragmentType.IfStatement, "if aa"),
+                                        [
+                                            ConditionBlock(
+                                                [
+                                                    Branch(
+                                                        FileFragment(FragmentType.IfStatement, "if aaa"),
+                                                        [
+                                                            "aaa body"
+                                                        ])
+                                                ],
+                                                "endif aaa"
+                                            ),
+                                        ]),
                                     Branch(
                                         FileFragment(FragmentType.ElseStatement, "else"),
                                         [
@@ -283,10 +289,9 @@ class BlockModelBuilderTests(unittest.TestCase):
                 self.assertEqual(act_i, exp_i)
 
     def _check_Block(self, act, exp):
-        self._check_Branches(act.start, exp.start)
-        self.assertEqual(len(act.next), len(exp.next))
-        for i in range(0, len(exp.next)):
-            self._check_Branches(act.next[i], exp.next[i])
+        self.assertEqual(len(act.branches), len(exp.branches))
+        for i in range(0, len(exp.branches)):
+            self._check_Branches(act.branches[i], exp.branches[i])
         self.assertEqual(act.end, exp.end)
 
     def _check_Branches(self, act, exp):

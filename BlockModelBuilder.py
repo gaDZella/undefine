@@ -65,7 +65,7 @@ def _build_block(it, if_f):
         next_branches.append(Branch(cond, body))
     if f is None or f.type != FragmentType.EndIfStatement:
         raise SyntaxException()
-    return ConditionBlock(Branch(start_cond, start_body), next_branches, f.text)
+    return ConditionBlock([Branch(start_cond, start_body)] + next_branches, f.text)
 
 
 def _create_iterator(obj):
