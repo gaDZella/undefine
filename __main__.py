@@ -5,12 +5,14 @@ from SharpCleaner import SharpCleaner
 
 def test(p_args):
     print("Checking for applying the following name definitions:")
-    _show_report(_do_clean(p_args, False), "{0} code lines can be removed. {1} files and {2} lines would be affected")
+    _show_report(_do_clean(p_args, False),
+                 "{0} code lines to remove. {2} total number of lines to remove. {1} files affected")
 
 
 def apply(p_args):
     print("Applying the following name definitions:")
-    _show_report(_do_clean(p_args, True), "{0} code lines removed. {1} files and {2} lines affected")
+    _show_report(_do_clean(p_args, True),
+                 "{0} code lines removed. {2} total number of lines removed. {1} files affected")
 
 
 def _do_clean(p_args,  apply_changes):
@@ -38,22 +40,17 @@ def _show_report(results, completed_report_format_string):
                 total_lines += result.total_lines
                 if result.total_lines > 0:
                     files_count += 1
-    print(str.format("Completed. " + completed_report_format_string,
+    print(str.format("Complete. " + completed_report_format_string,
                      code_lines, files_count, total_lines))
     if len(error_files) > 0:
-        print("Failed on these files:")
+        print("Failed to process these files:")
         for file in error_files:
             print(file)
 
 
-def scan(p_args):
-    print("TODO...")
-    print(p_args)
-
-
 def _add_name_definition_args(p):
-    p.add_argument('-d', '--define', action='append', metavar='name', help='define global preprocessor var')
-    p.add_argument('-u', '--undef', action='append', metavar='name', help='undefine global preprocessor var')
+    p.add_argument('-d', '--define', action='append', metavar='name', help='preprocessor name to define.')
+    p.add_argument('-u', '--undef', action='append', metavar='name', help='preprocessor name to undefine.')
 
 
 def _add_working_path_args(p):
@@ -65,19 +62,15 @@ parser = argparse.ArgumentParser()
 
 subparsers = parser.add_subparsers(help='commands')
 
-parser_check = subparsers.add_parser('test', help='test command')
+parser_check = subparsers.add_parser('check', help='Processes files and shows results without applying changes.')
 _add_name_definition_args(parser_check)
 _add_working_path_args(parser_check)
 parser_check.set_defaults(act=test)
 
-parser_clean = subparsers.add_parser('apply', help='apply command')
+parser_clean = subparsers.add_parser('apply', help='Processes files, shows results, and applies changes.')
 _add_name_definition_args(parser_clean)
 _add_working_path_args(parser_clean)
 parser_clean.set_defaults(act=apply)
-
-parser_stats = subparsers.add_parser('scan', help='scan command')
-_add_working_path_args(parser_stats)
-parser_stats.set_defaults(act=scan)
 
 args = parser.parse_args()
 if hasattr(args, 'act'):
