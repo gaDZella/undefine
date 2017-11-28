@@ -1,5 +1,6 @@
 import chardet
 import glob
+import os.path
 from joblib import Parallel, delayed
 import FlatModelBuilder
 import BlockModelBuilder
@@ -11,6 +12,12 @@ import LineCounter
 class SharpCleaner:
     def __init__(self, keys):
         self.keys = keys
+
+    def clean(self, path, apply_changes=True):
+        if os.path.isfile(path):
+            return [self.clean_file(path, apply_changes)]
+        else:
+            return self.clean_folder(path, apply_changes)
 
     def clean_file(self, file, apply_changes=True):
         encoding = self._read_encoding(file)

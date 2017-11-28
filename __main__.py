@@ -23,7 +23,7 @@ def _do_clean(p_args,  apply_changes):
         print(str.format("#{0} {1}", 'define' if value else 'undef', name))
     print('...', end='\r')
     cleaner = SharpCleaner(keys)
-    return cleaner.clean_folder(p_args.path, apply_changes)
+    return cleaner.clean(p_args.path, apply_changes)
 
 
 def _show_report(results, completed_report_format_string):
