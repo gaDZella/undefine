@@ -1,4 +1,3 @@
-.. image:: https://api.travis-ci.org/gaDZella/undefine.svg?branch=master
-    :alt: Build status
+![Build status](https://api.travis-ci.org/gaDZella/undefine.svg?branch=master)
 
 # clean-sharp
