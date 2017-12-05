@@ -110,6 +110,26 @@ class FlatModelBuilderTests(unittest.TestCase):
             ("/* \n // test \n */end", FragmentType.Body)
         ])
 
+    def test_MultiLineCommentInsideLineComment(self):
+        file = "// /* \n #if test \n //*/"
+        m = FlatModelBuilder.build(file)
+
+        self._check_Model(m, [
+            ("// /* \n", FragmentType.Body),
+            (" #if test \n", FragmentType.IfStatement),
+            (" //*/", FragmentType.Body)
+        ])
+
+    def test_MultiLineCommentInsideLineComment_Complex(self):
+        file = "// /* */ /* \n #if test // /* \n //*/ */"
+        m = FlatModelBuilder.build(file)
+
+        self._check_Model(m, [
+            ("// /* */ /* \n", FragmentType.Body),
+            (" #if test ", FragmentType.IfStatement),
+            ("// /* \n //*/ */", FragmentType.Body)
+        ])
+
     def test_IfInsideMultilineComment(self):
         file = "/* \n // #if test\n */ #endif\n*/"
         m = FlatModelBuilder.build(file)

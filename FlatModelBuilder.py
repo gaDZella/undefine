@@ -5,6 +5,7 @@ from Model.FragmentType import FragmentType
 
 MiltilineCommentP = r"/\*(?:\n|.)+?\*/"
 LineCommentP = r"//.+?(?:\n|$)"
+CommentsP = r"(?:(?://.+?(?:\n|$))|(?:/\*(?:\n|.)+?\*/))"
 IfStatementP = r"[ \t\f]*#[ \t\f]*if\s*.+?(?:\n|$)"
 ElifStatementP = r"[ \t\f]*#[ \t\f]*elif\s*.+?(?:\n|$)"
 ElseStatementP = r"[ \t\f]*#[ \t\f]*else\s*?(?:\n|$)"
@@ -13,8 +14,7 @@ EndIfStatementP = r"[ \t\f]*#[ \t\f]*endif\s*?(?:\n|$)?"
 
 def build(file):
     model = split_recursive(file, [
-        (MiltilineCommentP, FragmentType.Body),
-        (LineCommentP, FragmentType.Body),
+        (CommentsP, FragmentType.Body),
         (IfStatementP, FragmentType.IfStatement),
         (ElifStatementP, FragmentType.ElIfStatement),
         (ElseStatementP, FragmentType.ElseStatement),
