@@ -67,15 +67,23 @@ class FlatModelBuilderTests(unittest.TestCase):
         ])
 
     def test_singleBody(self):
-        file = "a#if DebugTest\nbb\nccc\n#endif\neeee"
+        file = "a\n#if DebugTest\nbb\nccc\n#endif\neeee"
         m = FlatModelBuilder.build(file)
 
         self._check_Model(m, [
-            ("a", FragmentType.Body),
+            ("a\n", FragmentType.Body),
             ("#if DebugTest\n", FragmentType.IfStatement),
             ("bb\nccc\n", FragmentType.Body),
             ("#endif\n", FragmentType.EndIfStatement),
             ("eeee", FragmentType.Body)
+        ])
+
+    def test_Constants(self):
+        file = 'string if = "#if", else = "#else", elif = "#elif", endif = "#endif";'
+        m = FlatModelBuilder.build(file)
+
+        self._check_Model(m, [
+            ('string if = "#if", else = "#else", elif = "#elif", endif = "#endif";', FragmentType.Body)
         ])
 
     def test_Comment(self):

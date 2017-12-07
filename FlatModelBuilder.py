@@ -3,13 +3,11 @@ from Model.Fragment import Fragment
 from Model.FragmentType import FragmentType
 
 
-MiltilineCommentP = r"/\*(?:\n|.)+?\*/"
-LineCommentP = r"//.+?(?:\n|$)"
-CommentsP = r"(?:(?://.+?(?:\n|$))|(?:/\*(?:\n|.)+?\*/))"
-IfStatementP = r"[ \t\f]*#[ \t\f]*if\s*.+?(?:\n|$)"
-ElifStatementP = r"[ \t\f]*#[ \t\f]*elif\s*.+?(?:\n|$)"
-ElseStatementP = r"[ \t\f]*#[ \t\f]*else\s*?(?:\n|$)"
-EndIfStatementP = r"[ \t\f]*#[ \t\f]*endif\s*?(?:\n|$)?"
+CommentsP = r"(?m)(?:(?://.+?(?:\n|$))|(?:/\*(?:\n|.)+?\*/))"
+IfStatementP = r"(?m)^[ \t\f]*#[ \t\f]*if\s*.+?(?:\n|$)"
+ElifStatementP = r"(?m)^[ \t\f]*#[ \t\f]*elif\s*.+?(?:\n|$)"
+ElseStatementP = r"(?m)^[ \t\f]*#[ \t\f]*else\s*?(?:\n|$)"
+EndIfStatementP = r"(?m)^[ \t\f]*#[ \t\f]*endif\s*?(?:\n|$)?"
 
 
 def build(file):

@@ -61,6 +61,9 @@ class IntegrationTests(unittest.TestCase):
     def test_choice_commented(self):
         self._test_choice("commented")
 
+    def test_choice_constants(self):
+        self._test_choice("constants")
+
     def _test_choice(self, name):
         in_file_path = str.format("{}/{}.in.cs", self.test_dir, name)
         out_file_path = str.format("{}/{}.out.cs", self.test_dir, name)
