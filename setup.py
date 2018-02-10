@@ -9,9 +9,9 @@ def test_suite():
 
 
 setup(
-    name="clean-sharp",
+    name="undefine",
     version="0.0.1",
-    description="C# Preprocessor directive cleaner",
+    description="C# Preprocessor tool",
     install_requires=["joblib", "chardet", "sympy"],
     test_suite='setup.test_suite'
 )
