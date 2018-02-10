@@ -1,4 +1,4 @@
-![Build status](https://api.travis-ci.org/gaDZella/undefine.svg?branch=master)
+[![Build Status](https://travis-ci.org/gaDZella/undefine.svg?branch=master)](https://travis-ci.org/gaDZella/undefine)
 [![codecov.io](https://codecov.io/github/gaDZella/undefine/coverage.svg?branch=master)](https://codecov.io/github/gaDZella/undefine)
 [![Maintainability](https://api.codeclimate.com/v1/badges/276111ca7e859d7af472/maintainability)](https://codeclimate.com/github/gaDZella/undefine/maintainability)
 
