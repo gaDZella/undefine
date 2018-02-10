@@ -1,5 +1,9 @@
 ![Build status](https://api.travis-ci.org/gaDZella/undefine.svg?branch=master)
 
+
+[![codecov.io](https://codecov.io/github/gaDZella/undefine/coverage.svg?branch=master)](https://codecov.io/github/gaDZella/undefine)
+
+
 # undefine - C# Preprocessor tool
 
 This is analog of standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) ported for C# syntax specifics.

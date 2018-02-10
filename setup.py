@@ -7,6 +7,7 @@ def test_suite():
     suite = test_loader.discover('tests', pattern='*.py')
     return suite
 
+
 setup(
     name="clean-sharp",
     version="0.0.1",
