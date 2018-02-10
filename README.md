@@ -1,6 +1,4 @@
 ![Build status](https://api.travis-ci.org/gaDZella/undefine.svg?branch=master)
-
-
 [![codecov.io](https://codecov.io/github/gaDZella/undefine/coverage.svg?branch=master)](https://codecov.io/github/gaDZella/undefine)
 
 
