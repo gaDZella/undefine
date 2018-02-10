@@ -5,14 +5,14 @@
 
 # undefine - C# Preprocessor tool
 
-This is analog of standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) ported for C# syntax specifics.
-All of standard C tools are not completely compatible with C# code syntax.
+This is an analog of the standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) ported for C# syntax specifics.
+Unlike the standard C tools **undefine** is fully compatible with the C# code syntax.
 
 ### How it works
-This tool parses provided C# code file with a view to build file C# preprocessor internal syntax model.
-Further the conditional directives in the model are analyzed and the model is modified based on provided conditional symbol values.
-The resulting condition is simplified and the overall model is simplified too.
-Take a look at this in action:
+This tool parses C# code files in order to build an internal preprocessor directives model.
+Then the model's conditional directives are analyzed and the model is modified based on provided conditional symbol values.
+The resulting condition is simplified and the overall model is simplified as well.
+See how it works in action:
 
 Input Foo.cs file:
 ```
@@ -29,7 +29,7 @@ Input Foo.cs file:
 ...
 ```
 
-Say, the user wants to remove A and Y symbols defining it values as:
+Say, the user wants to remove the A and Y symbols defining their values as:
  ```
  A = True
  Y = False
@@ -48,27 +48,27 @@ Output Foo.cs file:
 ...
 ```
 
-This example looks a bit synthetic but it demonstrates directive condition and structural modification in detail.
+This example looks a bit synthetic but it demonstrates a directive condition and a structural modification in detail.
 
 ### Usage
 
 The tool has 2 working modes: `check` and `apply`
 
-In `check` mode it silently makes all work in memory and shows the resulting message.
-In `apply` mode it makes the same work but overrides the source files.
+In `check` mode it silently does all the work in memory and shows the resulting message.
+In `apply` mode it does the same but overrides source files.
 
-Use `undefine --help` command to show tool man page:
+Use `undefine --help` command to show the tool man page:
 
 ```
 undefine [command] [-d symbol] [-u symbol] [path]
 ```
 
-Command arguments -d and -u provides target symbol values:
+Command arguments -d and -u provide target symbol values:
 
 * `-d` defines the symbol (True value)
 * `-u` undefines the symbol (False value)
 
-For the previous example the command looks in a following manner:
+For the previous example the command looks as follows:
 
 ```
 undefine apply -d A -u Y Foo.cs
