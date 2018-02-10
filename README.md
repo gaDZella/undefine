@@ -1,6 +1,6 @@
 ![Build status](https://api.travis-ci.org/gaDZella/undefine.svg?branch=master)
 
-# undefine - C# Preprocessor refactoring tool
+# undefine - C# Preprocessor tool
 
 This is analog of standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) ported for C# syntax specifics.
 All of standard C tools are not completely compatible with C# code syntax.
