@@ -2,7 +2,7 @@
 
 # undefine - C# Preprocessor refactoring tool
 
-This is small analog of standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) optimized for C# syntax.
+This is small analog of standard C Preprocessor tools: [unifdef](http://manpages.ubuntu.com/manpages/xenial/man1/unifdef.1.html), [coan](http://coan2.sourceforge.net/) ported for C# syntax specifics.
 
 ### How it works
 This tool parses provided C# code file with a view to build file C# preprocessor internal syntax model.
@@ -10,7 +10,7 @@ Further the conditional directives in the model are analyzed and the model is mo
 The resulting condition is simplified and the overall model is simplified too.
 Take a look at this in action:
 
-Input file:
+Input Foo.cs file:
 ```
 ...
 #if A && Z
@@ -25,13 +25,13 @@ Input file:
 ...
 ```
 
-Say, the user wants remove symbols A and Y and set it:
+Say, the user wants to remove A and Y symbols defining it values as:
  ```
  A = True
  Y = False
  ```
 
-The tool output file:
+Output Foo.cs file:
 ```
 ...
 #if Z
@@ -44,4 +44,32 @@ The tool output file:
 ...
 ```
 
-This example looks a bit synthetic but it demonstrates the preprocessor directive condition and structural modification.
+This example looks a bit synthetic but it demonstrates directive condition and structural modification in detail.
+
+### Usage
+
+The tool has 2 working modes: `check` and `apply`
+
+In `check` mode it silently makes all work in memory and shows the resulting message.
+In `apply` mode it makes the same work but overrides the source files.
+
+Use `undefine --help` command to show tool man page:
+
+```
+undefine [command] [-d symbol] [-u symbol] [path]
+```
+
+Command arguments -d and -u provides target symbol values:
+
+* `-d` defines the symbol (True value)
+* `-u` undefines the symbol (False value)
+
+For the previous example the command looks in a following manner:
+
+```
+undefine apply -d A -u Y Foo.cs
+```
+
+The `path` argument can also mean the folder path.
+
+
